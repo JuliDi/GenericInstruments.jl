@@ -33,6 +33,7 @@ F335x2 = Union{INSTR{:Agilent33500B},
 NIFgen = Union{INSTR{:NI5421},
 	INSTR{:NI5422}
 	}
+DG1022Z = Union{INSTR{:RigolDG1022Z}}
 	
 ##############################################
 # DMM

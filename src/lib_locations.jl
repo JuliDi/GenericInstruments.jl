@@ -13,12 +13,12 @@ elseif Sys.islinux()
 	const libnihsdio = ""
 	const libvisa = ""
 elseif Sys.isapple()
-	@error "Please add the lib paths manually and rebuild the package!"
+	#@error "Please add the lib paths manually and rebuild the package!"
 	const libniscope = ""
 	const libnidmm = ""
 	const libnifgen = ""
 	const libnihsdio = ""
-	const libvisa = ""
+	const libvisa = "/Library/Frameworks/VISA.framework/VISA"
 elseif Sys.isunix()
 	@error "Please add the lib paths manually and rebuild the package!"
 	const libniscope = ""

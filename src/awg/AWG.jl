@@ -11,4 +11,7 @@ include("./Agilent/Agilent33250A.jl")
 # NI
 include("NIFgen/NIFgen.jl")
 include("NIFgen/NIFgen_Misc.jl")
+# Rigol
+include("Rigol/AWG_Rigol_common.jl")
+include("Rigol/Rigol_DG1022Z.jl")
 end #endmodule
