@@ -29,8 +29,8 @@ get_idn(obj::T) where {T <: Union{DG1022Z}} = query(obj, "*IDN?")
 ## OUTPUT FUNCTION
 # Waveform
 set_wfm(obj::T;ch="1",func="sin") where {T <: Union{DG1022Z}} = write(obj, "SOURce$ch:FUNC $func")
-# ARB Waveform
-# set_arb_wfm(obj::T;ch="1",arb="mywfm") where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:FUNCtion:ARBitrary $arb") # TODO: get this working on Rigol_DG1022Z
+# Enable Arb Waveform output
+set_wfm_arb(obj::T;ch="1") where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:APPLy:ARBitrary")
 # Amplitude
 set_amplit(obj::T;ch="1",unit="vpp",volt=0.01) where {T <: Union{DG1022Z}} = write(obj, "SOURce$ch:VOLT:UNIT $unit ; :SOURce$ch:VOLT $volt")
 # Offset
@@ -65,23 +65,28 @@ set_pol(obj::T;ch="1",pol="normal") where {T<:Union{DG1022Z}} = write(obj,"OUTP$
 # Output on/off
 set_outp(obj::T;ch="1",st="off") where {T<:Union{DG1022Z}} = write(obj,"OUTP$ch $st")
 
-### SYNC
-## Sync state
-# set_sync_stat(obj::T;ch="1",st="on") where {T<:Union{F332x1,F335x2}} = write(obj,"OUTP$ch:SYNC $st")
-#
+## SYNC
+# Sync state
+set_sync_stat(obj::T;ch="1",st="on") where {T<:Union{DG1022Z}} = write(obj,"OUTP$ch:SYNC $st")
+
 ## Beeper
-# set_beep(obj::T;st="off") where {T<:Union{F332x1,F335x2}} = write(obj,"SYST:BEEP:STAT $st")
-## Query action completed
-# query_complete(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"*OPC?")
-## Wait for action to complete
-# wait_complete(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"*WAI")
-## Read error
-# query_error(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"SYST:ERR?")
-#
-### ARBITRARY WAVEFORMS
-## Arb sample rate
-# set_sample_rate(obj::T;ch="1",srate=1e6) where {T<:Union{F332x1,F335x2}} = write(obj,"SOURce$ch:FUNC:ARB:SRAT $srate")
-## Clear all arbs from volatile memory
-# clear_arbs(obj::T;ch="1") where {T<:Union{F332x1,F335x2}} = write(obj,"SOURce$ch:DATA:VOLatile:CLEar")
+set_beep(obj::T;st="off") where {T<:Union{DG1022Z}} = write(obj,"SYST:BEEP:STAT $st")
 
+# Query action completed
+query_complete(obj::T) where {T<:Union{DG1022Z}} = query(obj,"*OPC?")
+# Wait for action to complete
+wait_complete(obj::T) where {T<:Union{DG1022Z}} = query(obj,"*WAI")
+# Read error
+query_error(obj::T) where {T<:Union{DG1022Z}} = query(obj,"SYST:ERR?")
 
+## ARBITRARY WAVEFORMS
+# Arb mode (FREQ or SRATe)
+set_arb_mode(obj::T;ch="1",mode="FREQ") where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:FUNC:ARB:MODE $mode")
+# Arb sample rate
+set_sample_rate(obj::T;ch="1",srate=1e6) where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:FUNC:ARB:SRAT $srate")
+# Clear all arbs from volatile memory
+#clear_arbs(obj::T;ch="1") where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:DATA:VOLATILE:CLEar") # Doesnt seem supported on the Rigol_DG1022Z
+# Arb data points volatile
+set_arb_data(obj::T;ch="1",values="-1,-1,-0.5,-0.5,0,0.5,0.5,1.0,1.0") where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:DATA VOLATILE,$values")
+# Arb data number of points
+set_arb_points(obj::T;ch="1",points=10) where {T<:Union{DG1022Z}} = write(obj,"SOURce$ch:DATA:POIN VOLATILE,$points")
