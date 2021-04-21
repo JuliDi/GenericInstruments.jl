@@ -5,11 +5,12 @@
 # viFindRsrc(resmgr, expr)
 
 function check_status(status)
-	if status < VI_SUCCESS
-		errMsg = codes[status]
+	status_signed = reinterpret(Int32, UInt32(status))
+	if status_signed != VI_SUCCESS
+		errMsg = codes[status_signed]
 		error("VISA C call failed with status $(errMsg[1]): $(errMsg[2])")
 	end
-	status
+	status_signed
 end
 
 #- Resource Manager Functions and Operations -------------------------------#
@@ -146,7 +147,9 @@ function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
 	if !obj.initialized
 		#Pointer for the instrument handle
 		vi = ViPSession(0)
-		check_status(viOpen(sesn, obj.address, mode, timeout, vi))
+		status = viOpen(sesn, obj.address, mode, timeout, vi)
+		println("status: ", status)
+		check_status(status)
 		obj.handle = vi.x
 		obj.initialized = true
 	end

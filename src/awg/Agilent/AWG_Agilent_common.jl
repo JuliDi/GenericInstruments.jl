@@ -4,13 +4,6 @@
 # more general method template, superseded by basic method template
 #set_wfm(obj::T;func="sin",ch="1") where {T<:Union{F332x1,F335x2}} = write(obj,"SOURce$ch:FUNC $func")
 
-## 
-# Reset
-reset_instr(obj::T) where {T<:Union{F332x1,F335x2}} = write(obj,"*RST")
-# Clear
-clear_instr(obj::T) where {T<:Union{F332x1,F335x2}} = write(obj,"*CLS")
-# IDN
-get_idn(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"*IDN?")
 
 ## TRIGGER
 # Trigger source
@@ -67,15 +60,6 @@ set_outp(obj::T;ch="1",st="off") where {T<:Union{F332x1,F335x2}} = write(obj,"OU
 ## SYNC
 # Sync state
 set_sync_stat(obj::T;ch="1",st="on") where {T<:Union{F332x1,F335x2}} = write(obj,"OUTP$ch:SYNC $st")
-
-# Beeper
-set_beep(obj::T;st="off") where {T<:Union{F332x1,F335x2}} = write(obj,"SYST:BEEP:STAT $st")
-# Query action completed
-query_complete(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"*OPC?")
-# Wait for action to complete
-wait_complete(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"*WAI")
-# Read error
-query_error(obj::T) where {T<:Union{F332x1,F335x2}} = query(obj,"SYST:ERR?")
 
 ## ARBITRARY WAVEFORMS
 # Arb sample rate
